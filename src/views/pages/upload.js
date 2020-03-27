@@ -45,7 +45,7 @@ export class Upload extends Component {
             </div>
             <div className="h-6">
               <h1>Selected Image</h1>
-              <Canvas />
+              <Canvas imageSRC={this.state.imageSRC} />
               {/* <img src={this.state.imageSRC} alt=""></img> */}
             </div>
           </div>
