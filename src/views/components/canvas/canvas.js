@@ -27,21 +27,15 @@ export class Canvas extends Component {
         {
           imageSRC: this.props.imageSRC
         },
-        () => this.drawCropRect()
+        () => this.drawCropRect(0, 0, this.props.width, this.props.height)
       );
-      // let img = new Image();
-      // img.onload = () => {
-      //   this.ctx.drawImage(img, 0, 0, img.width, img.height);
-      // };
-      // img.src = this.props.imageSRC;
-      // this.drawCropRect();
     }
   }
-  drawCropRect = () => {
+  drawCropRect = (x = 0, y = 0, width, height) => {
     this.ctx.beginPath();
     this.ctx.lineWidth = '6';
     this.ctx.strokeStyle = 'red';
-    this.ctx.rect(0, 0, this.props.width, this.props.height);
+    this.ctx.rect(x, y, width, height);
     this.ctx.stroke();
   };
   componentWillUnmount() {
@@ -59,11 +53,10 @@ export class Canvas extends Component {
   }
 
   onMouseDown = e => {
-    console.log(e.offsetX);
     this.isDrag = true;
     this.curX = this.startX = e.offsetX;
     this.curY = this.startY = e.offsetY;
-    // requestAnimationFrame(this.updateCanvas)
+    requestAnimationFrame(this.updateCanvas);
   };
 
   onMouseMove = e => {
@@ -74,36 +67,38 @@ export class Canvas extends Component {
   };
 
   onMouseUp = e => {
-    this.isDrag = false;
-    this.isDirty = true;
     const rect = {
-      x: Math.min(this.startX, this.curX),
-      y: Math.min(this.startY, this.curY),
-      w: Math.abs(e.offsetX - this.startX),
-      h: Math.abs(e.offsetY - this.startY)
+      x: this.curX - this.startX,
+      y: this.curY - this.startY
     };
-    this.props.onSelected(rect);
+    this.drawCropRect(rect.x, rect.y, this.props.width, this.props.height);
+    this.isDrag = false;
+    this.isDirty = false;
   };
 
-  // updateCanvas = () => {
-  //   if (this.isDrag) {
-  //     requestAnimationFrame(this.updateCanvas);
-  //   }
-  //   if (!this.isDirty) {
-  //     return;
-  //   }
-  //   this.ctx.clearRect(0, 0, this.props.width, this.props.height);
-  //   if (this.isDrag) {
-  //     const rect = {
-  //       x: this.startX,
-  //       y: this.startY,
-  //       w: this.curX - this.startX,
-  //       h: this.curY - this.startY
-  //     };
-  //     this.ctx.strokeRect(rect.x, rect.y, rect.w, rect.h);
-  //   }
-  //   this.isDirty = false;
-  // };
+  updateCanvas = () => {
+    if (this.isDrag) {
+      requestAnimationFrame(this.updateCanvas);
+    }
+    if (!this.isDirty) {
+      //when mouse not moving
+      const rect = {
+        x: this.curX - this.startX,
+        y: this.curY - this.startY
+      };
+      this.drawCropRect(rect.x, rect.y, this.props.width, this.props.height);
+      return;
+    }
+    this.ctx.clearRect(0, 0, 1024, 1024);
+    if (this.isDrag) {
+      const rect = {
+        x: this.curX - this.startX,
+        y: this.curY - this.startY
+      };
+      this.drawCropRect(rect.x, rect.y, this.props.width, this.props.height);
+    }
+    this.isDirty = false;
+  };
 
   render() {
     return (
@@ -111,8 +106,8 @@ export class Canvas extends Component {
         <img className="absolute z-0" src={this.state.imageSRC} alt=""></img>
         <canvas
           className="relative z-20"
-          width={this.props.width}
-          height={this.props.height}
+          width={1024}
+          height={1024}
           ref={c => {
             this.canvas = c;
           }}

@@ -14,11 +14,11 @@ export class Upload extends Component {
         img.onload = () => {
           if (img.width !== 1024 || img.height !== 1024) {
             this.setState({
-              imageSRC: null,
+              ...this.state,
               isInValidImage: true
             });
           } else {
-            this.setState({ imageSRC: img.src });
+            this.setState({ ...this.state, imageSRC: reader.result });
           }
         };
         img.src = reader.result;
@@ -45,7 +45,13 @@ export class Upload extends Component {
             </div>
             <div className="h-6">
               <h1>Selected Image</h1>
-              <Canvas imageSRC={this.state.imageSRC} width={755} height={450} />
+              {/* {this.state.imageSRC !== null && ( */}
+                <Canvas
+                  imageSRC={this.state.imageSRC}
+                  width={755}
+                  height={450}
+                />
+              {/* )} */}
             </div>
           </div>
         </div>
