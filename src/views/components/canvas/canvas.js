@@ -2,10 +2,6 @@ import React, { Component } from 'react';
 
 export class Canvas extends Component {
   static defaultProps = {
-    width: 1024,
-    height: 1024,
-    strokeStyle: '#F00',
-    lineWidth: 1,
     onSelected: () => {}
   };
   canvas = null;
@@ -15,6 +11,9 @@ export class Canvas extends Component {
   startY = -1;
   curX = -1;
   curY = -1;
+  state = {
+    imageSRC: null
+  };
   componentDidMount(props) {
     this.ctx = this.canvas.getContext('2d');
     this.ctx.strokeStyle = this.props.strokeStyle;
@@ -24,13 +23,27 @@ export class Canvas extends Component {
   }
   componentDidUpdate(prevProps, prevState) {
     if (this.props.imageSRC !== prevProps.imageSRC) {
-      let img = new Image();
-      img.onload = () => {
-        this.ctx.drawImage(img, 33, 71, 104, 124, 21, 20, 87, 104);
-      };
-      img.src = this.props.imageSRC;
+      this.setState(
+        {
+          imageSRC: this.props.imageSRC
+        },
+        () => this.drawCropRect()
+      );
+      // let img = new Image();
+      // img.onload = () => {
+      //   this.ctx.drawImage(img, 0, 0, img.width, img.height);
+      // };
+      // img.src = this.props.imageSRC;
+      // this.drawCropRect();
     }
   }
+  drawCropRect = () => {
+    this.ctx.beginPath();
+    this.ctx.lineWidth = '6';
+    this.ctx.strokeStyle = 'red';
+    this.ctx.rect(0, 0, this.props.width, this.props.height);
+    this.ctx.stroke();
+  };
   componentWillUnmount() {
     this.removeMouseEvents();
   }
@@ -46,6 +59,7 @@ export class Canvas extends Component {
   }
 
   onMouseDown = e => {
+    console.log(e.offsetX);
     this.isDrag = true;
     this.curX = this.startX = e.offsetX;
     this.curY = this.startY = e.offsetY;
@@ -93,13 +107,17 @@ export class Canvas extends Component {
 
   render() {
     return (
-      <canvas
-        width={this.props.width}
-        height={this.props.height}
-        ref={c => {
-          this.canvas = c;
-        }}
-      />
+      <>
+        <img className="absolute z-0" src={this.state.imageSRC} alt=""></img>
+        <canvas
+          className="relative z-20"
+          width={this.props.width}
+          height={this.props.height}
+          ref={c => {
+            this.canvas = c;
+          }}
+        />
+      </>
     );
   }
 }
