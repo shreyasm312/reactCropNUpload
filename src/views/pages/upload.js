@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Header from '../layouts/header/Header';
+import Canvas from '../components/canvas/canvas';
 export class Upload extends Component {
   state = {
     imageSRC: null,
@@ -11,17 +12,13 @@ export class Upload extends Component {
       reader.onload = () => {
         var img = new Image();
         img.onload = () => {
-          console.log(img.width, img.height);
           if (img.width !== 1024 || img.height !== 1024) {
             this.setState({
               imageSRC: null,
               isInValidImage: true
             });
           } else {
-            this.setState(
-              { imageSRC: img.src }
-              //set it back to false later
-            );
+            this.setState({ imageSRC: img.src });
           }
         };
         img.src = reader.result;
@@ -32,7 +29,7 @@ export class Upload extends Component {
   render() {
     console.log(this.state);
     return (
-      <>
+      <div className="h-full">
         <Header />
         <div className="container mx-auto">
           <div className="flex flex-col items-center">
@@ -46,13 +43,14 @@ export class Upload extends Component {
                 />
               </div>
             </div>
-            {/* <div className="h-6">{this.state.imageSRC}</div> */}
+            <div className="h-6">
+              <h1>Selected Image</h1>
+              <Canvas />
+              {/* <img src={this.state.imageSRC} alt=""></img> */}
+            </div>
           </div>
         </div>
-        <footer className="w-full absolute bottom-0 text-center p-2">
-          Paytm Insider Task by Shreyas
-        </footer>
-      </>
+      </div>
     );
   }
 }
