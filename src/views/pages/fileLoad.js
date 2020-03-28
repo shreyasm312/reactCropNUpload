@@ -14,17 +14,39 @@ export class Upload extends Component {
         var img = new Image();
         img.onload = () => {
           if (img.width !== 1024 || img.height !== 1024) {
-            this.setState({
-              ...this.state,
-              isInValidImage: true
-            });
+            this.setState(
+              {
+                ...this.state,
+                isInValidImage: true
+              },
+              () => {
+                const data = {
+                  imageRef: this.state.imageRef,
+                  imageSRC: this.state.imageSRC,
+                  isInValidImage: this.state.isInValidImage
+                };
+
+                this.props.fileLoadData(data);
+              }
+            );
           } else {
-            this.setState({
-              ...this.state,
-              imageRef: img,
-              imageSRC: reader.result,
-              isInValidImage: false
-            });
+            this.setState(
+              {
+                ...this.state,
+                imageRef: img,
+                imageSRC: reader.result,
+                isInValidImage: false
+              },
+              () => {
+                const data = {
+                  imageRef: this.state.imageRef,
+                  imageSRC: this.state.imageSRC,
+                  isInValidImage: this.state.isInValidImage
+                };
+
+                this.props.fileLoadData(data);
+              }
+            );
           }
         };
         img.src = reader.result;
@@ -32,6 +54,7 @@ export class Upload extends Component {
       reader.readAsDataURL(e.target.files[0]);
     }
   };
+
   render() {
     return (
       <div className="h-full">
@@ -39,7 +62,7 @@ export class Upload extends Component {
           className="container m-auto flex justify-center items-center"
           style={{ minHeight: 'calc(100vh - 89px)' }}
         >
-          <div className="flex text-center justify-center items-center">
+          <div className="flex flex-col text-center justify-center items-center">
             <input
               className="cursor-pointer absolute block opacity-0 pin-r pin-t"
               name="imageUpload"
@@ -64,8 +87,14 @@ export class Upload extends Component {
                   Select Image
                 </span>
                 <span className="text-gray-500 text-xs">
-                  Allowed Size is 1024 * 1024
+                  Allowed image size is 1024 * 1024
                 </span>
+                {/* <span className="text-base">
+                  Final Crop sizes
+                  <span className="text-xs text-gray-700">
+                    <br /> 755 * 450 . 365 * 450 <br /> 365 *212 . 380 * 380
+                  </span>
+                </span> */}
               </div>
             </label>
           </div>
