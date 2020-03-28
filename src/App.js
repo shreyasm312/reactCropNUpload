@@ -4,7 +4,6 @@ import { history } from './helpers';
 
 import NotFound from './views/pages/notFound';
 import Dashboard from './views/pages/dashboard';
-import Upload from './views/pages/fileLoad';
 
 export class App extends Component {
   render() {
