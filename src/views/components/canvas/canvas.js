@@ -65,7 +65,14 @@ export class Canvas extends Component {
       x: this.curX - this.startX,
       y: this.curY - this.startY
     };
-    this.props.onSelected(rect, this.ctx);
+    if (
+      rect.x >= 0 &&
+      rect.y >= 0 &&
+      rect.x + 755 < 1024 &&
+      rect.y + 450 < 1024
+    ) {
+      this.props.onSelected(rect, this.ctx);
+    }
     this.isDrag = false;
     this.isDirty = true;
   };
@@ -115,7 +122,6 @@ export class Canvas extends Component {
   };
 
   render() {
-    console.log(this.state);
     return (
       <>
         {this.state.imageSRC !== null && (

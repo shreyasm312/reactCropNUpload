@@ -105,7 +105,6 @@ export class Upload extends Component {
     }
   };
   render() {
-    // console.log(this.state);
     return (
       <div className="h-full">
         <Header />
