@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import Header from '../layouts/header/Header';
-
+import Upload from './upload';
 export class Dashboard extends Component {
   render() {
     return (
       <>
         <Header />
-        <div className="container mx-auto relative"></div>
-        <footer className="w-full absolute bottom-0 text-center p-2">
+        <Upload />
+        <footer className="w-full absolute bottom-0 text-center p-2 text-xs text-gray-700">
           Paytm Insider Task by Shreyas
         </footer>
       </>

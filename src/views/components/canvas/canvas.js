@@ -24,11 +24,11 @@ export class Canvas extends Component {
       () => this.drawCropRect(0, 0, this.props.width, this.props.height)
     );
   }
-  componentDidUpdate(prevProps, prevState) {}
   drawCropRect = (x = 0, y = 0, width, height) => {
     this.ctx.beginPath();
-    this.ctx.lineWidth = '6';
-    this.ctx.strokeStyle = 'red';
+    this.ctx.lineWidth = '2';
+    this.ctx.strokeStyle = 'black';
+    this.ctx.setLineDash([12, 3, 3]);
     this.ctx.rect(x, y, width, height);
     this.ctx.stroke();
   };
@@ -71,6 +71,7 @@ export class Canvas extends Component {
       rect.x + 755 < 1024 &&
       rect.y + 450 < 1024
     ) {
+      this.removeMouseEvents(); //add it to stop listening for now
       this.props.onSelected(rect, this.ctx);
     }
     this.isDrag = false;
