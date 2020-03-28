@@ -14,20 +14,17 @@ export class Canvas extends Component {
   state = {
     imageSRC: null
   };
-  componentDidMount(props) {
+  componentDidMount() {
     this.ctx = this.canvas.getContext('2d');
     this.addMouseEvents();
+    this.setState(
+      {
+        imageSRC: this.props.imageSRC
+      },
+      () => this.drawCropRect(0, 0, this.props.width, this.props.height)
+    );
   }
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props.imageSRC !== prevProps.imageSRC) {
-      this.setState(
-        {
-          imageSRC: this.props.imageSRC
-        },
-        () => this.drawCropRect(0, 0, this.props.width, this.props.height)
-      );
-    }
-  }
+  componentDidUpdate(prevProps, prevState) {}
   drawCropRect = (x = 0, y = 0, width, height) => {
     this.ctx.beginPath();
     this.ctx.lineWidth = '6';
@@ -118,9 +115,12 @@ export class Canvas extends Component {
   };
 
   render() {
+    console.log(this.state);
     return (
       <>
-        <img className="absolute z-0" src={this.state.imageSRC} alt=""></img>
+        {this.state.imageSRC !== null && (
+          <img className="absolute z-0" src={this.state.imageSRC} alt=""></img>
+        )}
         <canvas
           className="relative z-20 min-h-full"
           width={1024}

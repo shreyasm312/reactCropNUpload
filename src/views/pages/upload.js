@@ -3,12 +3,11 @@ import Header from '../layouts/header/Header';
 import Canvas from '../components/canvas/canvas';
 export class Upload extends Component {
   state = {
-    imageSRC: null,
     imageRef: null,
-    isInValidImage: false,
+    imageSRC: null,
+    isInValidImage: true,
     cropPixels: {},
-    ctx: {},
-    canvas: null,
+    ctx: undefined,
     cropSize: [
       {
         id: 0,
@@ -33,14 +32,13 @@ export class Upload extends Component {
     ],
     croppedImages: [undefined, undefined, undefined, undefined]
   };
-
   componentDidUpdate(prevProps, prevState) {
     if (this.state.cropPixels !== prevState.cropPixels) {
       this.getCroppedImage(this.state.cropPixels);
     }
   }
   onSelectFile = e => {
-    if (e.target.files) {
+    if (e.target.files && e.target.files.length > 0) {
       let reader = new FileReader();
       reader.onload = () => {
         var img = new Image();
@@ -53,8 +51,9 @@ export class Upload extends Component {
           } else {
             this.setState({
               ...this.state,
+              imageRef: img,
               imageSRC: reader.result,
-              imageRef: img
+              isInValidImage: false
             });
           }
         };
@@ -73,13 +72,13 @@ export class Upload extends Component {
     newCroppedImageUrls[this.state.cropSize[0].id] = croppedImageUrl;
     this.setState({ croppedImages: newCroppedImageUrls });
   };
-  cropImage = (imageSRC, cropPixels, fileName) => {
-    if (imageSRC !== null) {
+  cropImage = (imageRef, cropPixels, fileName) => {
+    if (imageRef !== null) {
       const { ctx } = this.state;
       ctx.canvas.width = ctx.width = this.state.cropSize[0].width;
       ctx.canvas.height = ctx.height = this.state.cropSize[0].height;
       ctx.drawImage(
-        imageSRC,
+        imageRef,
         cropPixels.x,
         cropPixels.y,
         this.state.cropSize[0].width,
@@ -106,7 +105,7 @@ export class Upload extends Component {
     }
   };
   render() {
-    // console.log(this.state.croppedImages);
+    // console.log(this.state);
     return (
       <div className="h-full">
         <Header />
@@ -122,23 +121,29 @@ export class Upload extends Component {
                 />
               </div>
             </div>
-            <div className="block" style={{ maxHeight: 1024, maxWidth: 1024 }}>
-              <h1>Selected Image</h1>
-              <Canvas
-                imageSRC={this.state.imageSRC}
-                width={this.state.cropSize[0].width}
-                height={this.state.cropSize[0].height}
-                onSelected={(cropPixels, ctx) =>
-                  this.setState({
-                    ...this.state,
-                    cropPixels,
-                    ctx
-                  })
-                }
-              />
-            </div>
+            {!this.state.isInValidImage && this.state.imageRef !== null && (
+              <div
+                className="block m-4"
+                style={{ maxHeight: 1024, maxWidth: 1024 }}
+              >
+                <h1>Selected Image</h1>
+                <Canvas
+                  imageRef={this.state.imageRef}
+                  imageSRC={this.state.imageSRC}
+                  width={this.state.cropSize[0].width}
+                  height={this.state.cropSize[0].height}
+                  onSelected={(cropPixels, ctx) =>
+                    this.setState({
+                      ...this.state,
+                      cropPixels,
+                      ctx
+                    })
+                  }
+                />
+              </div>
+            )}
             {this.state.croppedImages[0] !== undefined && (
-              <div className="block border-2 border-black">
+              <div className="block border-2 border-black m-4">
                 <img src={this.state.croppedImages[0]} alt=""></img>
               </div>
             )}
