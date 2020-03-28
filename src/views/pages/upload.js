@@ -68,7 +68,6 @@ export class Upload extends Component {
       cropPixels,
       'size' + this.state.cropSize[0].id + '.jpeg'
     );
-    console.log(croppedImageUrl);
     var newCroppedImageUrls = this.state.croppedImages;
     newCroppedImageUrls[this.state.cropSize[0].id] = croppedImageUrl;
     this.setState({ croppedImages: newCroppedImageUrls });
@@ -83,7 +82,11 @@ export class Upload extends Component {
         cropPixels.x,
         cropPixels.y,
         this.state.cropSize[0].width,
-        this.state.cropSize[0].width
+        this.state.cropSize[0].height,
+        0,
+        0,
+        this.state.cropSize[0].width,
+        this.state.cropSize[0].height
       );
       return new Promise((resolve, reject) => {
         ctx.canvas.toBlob(blob => {
