@@ -11,7 +11,8 @@ export class Dashboard extends Component {
       imageSRC: null,
       isInValidImage: true
     },
-    crop: false,
+    cropped: false,
+    resetState: false,
     currentCrop: 0,
     cropSize: [
       {
@@ -36,8 +37,15 @@ export class Dashboard extends Component {
       }
     ]
   };
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.cropped !== prevState.cropped) {
+      this.setState({
+        resetState: !this.state.resetState
+      });
+    }
+  }
   render() {
-    // console.log(this.state);
+    // console.log(this.state.cropped);
     return (
       <div>
         <Header />
@@ -60,22 +68,32 @@ export class Dashboard extends Component {
             <>
               <div className="flex">
                 <button
-                  onClick={() => this.setState({ crop: !this.state.crop })}
+                  // onClick={() =>
+                  //   this.setState({ cropped: !this.state.cropped })
+                  // }
                   className="bg-transparent mx-2 mt-4 hover:bg-red-500 text-red-700 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded"
+                  // className={
+                  //   this.state.cropped
+                  //     ? 'bg-red-500 mx-2 mt-4 text-white font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed'
+                  //     : 'bg-transparent mx-2 mt-4 hover:bg-red-500 text-red-700 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded'
+                  // }
                 >
                   Crop Image {this.state.currentCrop + 1}
                 </button>
-                <button
-                  onClick={() => this.setState({ crop: !this.state.crop })}
-                  className="bg-transparent mx-2 mt-4 hover:bg-red-500 text-red-700 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded"
-                >
+                <button className="bg-transparent mx-2 mt-4 hover:bg-red-500 text-red-700 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded">
                   Next
                 </button>
               </div>
-              {!this.state.crop ? (
+              {!this.state.cropped ? (
                 <FilePreview imgPreview={this.state.fileLoadData.imageSRC} />
               ) : (
                 <Crop
+                  cropped={cropped =>
+                    this.setState({
+                      cropped
+                    })
+                  }
+                  resetState={this.state.resetState}
                   cropSize={this.state.cropSize[this.state.currentCrop]}
                   imageData={this.state.fileLoadData}
                 />

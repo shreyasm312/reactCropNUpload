@@ -12,7 +12,8 @@ export class Canvas extends Component {
   curX = -1;
   curY = -1;
   state = {
-    imageSRC: null
+    imageSRC: null,
+    cropped: false
   };
   componentDidMount() {
     this.ctx = this.canvas.getContext('2d');
@@ -23,6 +24,16 @@ export class Canvas extends Component {
       },
       () => this.drawCropRect(0, 0, this.props.width, this.props.height)
     );
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.resetState !== prevProps.resetState) {
+      // if (this.props.resetState) {
+      //   this.setState({
+      //     cropped: !this.state.cropped
+      //   });
+      //   this.addMouseEvents();
+      // }
+    }
   }
   drawCropRect = (x = 0, y = 0, width, height) => {
     this.ctx.beginPath();
@@ -71,8 +82,11 @@ export class Canvas extends Component {
       rect.x + 755 < 1024 &&
       rect.y + 450 < 1024
     ) {
-      // this.removeMouseEvents(); //add it to stop listening for now
-      this.props.onSelected(rect, this.ctx);
+      this.setState({
+        cropped: !this.state.cropped
+      });
+      this.props.onSelected(rect, this.ctx, this.state.cropped);
+      this.removeMouseEvents();
     }
     this.isDrag = false;
     this.isDirty = true;

@@ -5,6 +5,7 @@ export class Crop extends Component {
   state = {
     cropPixels: {},
     ctx: undefined,
+    cropped: false,
     croppedImages: [undefined, undefined, undefined, undefined]
   };
   componentDidUpdate(prevProps, prevState) {
@@ -55,7 +56,6 @@ export class Crop extends Component {
     }
   };
   render() {
-    console.log(this.props);
     return (
       <div className="flex flex-col items-center justify-center">
         {!this.state.isInValidImage && this.state.imageRef !== null && (
@@ -66,12 +66,17 @@ export class Crop extends Component {
               imageSRC={this.props.imageData.imageSRC}
               width={this.props.cropSize.width}
               height={this.props.cropSize.height}
-              onSelected={(cropPixels, ctx) =>
-                this.setState({
-                  ...this.state,
-                  cropPixels,
-                  ctx
-                })
+              resetState={this.props.resetState}
+              onSelected={(cropPixels, ctx, cropped) =>
+                this.setState(
+                  {
+                    ...this.state,
+                    cropPixels,
+                    ctx,
+                    cropped
+                  },
+                  () => this.props.cropped(cropped)
+                )
               }
             />
           </div>
