@@ -16,9 +16,6 @@ export class Canvas extends Component {
   };
   componentDidMount(props) {
     this.ctx = this.canvas.getContext('2d');
-    this.ctx.strokeStyle = this.props.strokeStyle;
-    this.ctx.lineWidth = this.props.lineWidth;
-
     this.addMouseEvents();
   }
   componentDidUpdate(prevProps, prevState) {
@@ -53,13 +50,13 @@ export class Canvas extends Component {
   }
 
   onMouseDown = e => {
-    this.isDrag = true;
     this.curX = this.startX = e.offsetX;
     this.curY = this.startY = e.offsetY;
     requestAnimationFrame(this.updateCanvas);
   };
 
   onMouseMove = e => {
+    this.isDrag = true;
     if (!this.isDrag) return;
     this.curX = e.offsetX;
     this.curY = e.offsetY;
@@ -71,31 +68,51 @@ export class Canvas extends Component {
       x: this.curX - this.startX,
       y: this.curY - this.startY
     };
-    this.drawCropRect(rect.x, rect.y, this.props.width, this.props.height);
+    this.props.onSelected(rect, this.ctx);
     this.isDrag = false;
-    this.isDirty = false;
+    this.isDirty = true;
   };
 
   updateCanvas = () => {
     if (this.isDrag) {
+      this.ctx.clearRect(0, 0, 1024, 1024);
       requestAnimationFrame(this.updateCanvas);
     }
     if (!this.isDirty) {
-      //when mouse not moving
       const rect = {
         x: this.curX - this.startX,
         y: this.curY - this.startY
       };
-      this.drawCropRect(rect.x, rect.y, this.props.width, this.props.height);
-      return;
+      if (
+        rect.x >= 0 &&
+        rect.y >= 0 &&
+        rect.x + 755 < 1024 &&
+        rect.y + 450 < 1024
+      ) {
+        this.drawCropRect(rect.x, rect.y, this.props.width, this.props.height);
+        this.isDirty = false;
+        return;
+      } else {
+        this.ctx.clearRect(0, 0, 1024, 1024);
+        this.isDirty = false;
+      }
     }
-    this.ctx.clearRect(0, 0, 1024, 1024);
+
     if (this.isDrag) {
       const rect = {
         x: this.curX - this.startX,
         y: this.curY - this.startY
       };
-      this.drawCropRect(rect.x, rect.y, this.props.width, this.props.height);
+      if (
+        rect.x >= 0 &&
+        rect.y >= 0 &&
+        rect.x + 755 < 1024 &&
+        rect.y + 450 < 1024
+      ) {
+        this.drawCropRect(rect.x, rect.y, this.props.width, this.props.height);
+      } else {
+        this.ctx.clearRect(0, 0, 1024, 1024);
+      }
     }
     this.isDirty = false;
   };
@@ -105,7 +122,7 @@ export class Canvas extends Component {
       <>
         <img className="absolute z-0" src={this.state.imageSRC} alt=""></img>
         <canvas
-          className="relative z-20"
+          className="relative z-20 min-h-full"
           width={1024}
           height={1024}
           ref={c => {

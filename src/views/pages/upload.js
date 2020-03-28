@@ -4,7 +4,34 @@ import Canvas from '../components/canvas/canvas';
 export class Upload extends Component {
   state = {
     imageSRC: null,
-    isInValidImage: false
+    imageRef: null,
+    isInValidImage: false,
+    cropPixels: {},
+    ctx: {},
+    canvas: null,
+    cropSize: [
+      {
+        id: 0,
+        width: 755,
+        height: 450
+      },
+      {
+        id: 1,
+        width: 365,
+        height: 450
+      },
+      {
+        id: 2,
+        width: 365,
+        height: 212
+      },
+      {
+        id: 3,
+        width: 380,
+        height: 380
+      }
+    ],
+    croppedImages: ['', '', '', '']
   };
   onSelectFile = e => {
     if (e.target.files) {
@@ -18,7 +45,11 @@ export class Upload extends Component {
               isInValidImage: true
             });
           } else {
-            this.setState({ ...this.state, imageSRC: reader.result });
+            this.setState({
+              ...this.state,
+              imageSRC: reader.result,
+              imageRef: img
+            });
           }
         };
         img.src = reader.result;
@@ -26,8 +57,50 @@ export class Upload extends Component {
       reader.readAsDataURL(e.target.files[0]);
     }
   };
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.cropPixels !== prevState.cropPixels) {
+      this.makeClientCrop(this.state.cropPixels);
+    }
+  }
+  async makeClientCrop(cropPixels) {
+    const croppedImageUrl = await this.cropImage(
+      this.state.imageRef,
+      cropPixels,
+      'size' + this.state.cropSize[0].id + '.jpeg'
+    );
+    console.log(croppedImageUrl);
+    var newCroppedImageUrls = this.state.croppedImages;
+    newCroppedImageUrls[this.state.cropSize[0].id] = croppedImageUrl;
+    this.setState({ croppedImages: newCroppedImageUrls });
+  }
+  cropImage = (imageSRC, cropPixels, fileName) => {
+    if (imageSRC !== null) {
+      const { ctx } = this.state;
+      ctx.canvas.width = ctx.width = this.state.cropSize[0].width;
+      ctx.canvas.height = ctx.height = this.state.cropSize[0].height;
+      ctx.drawImage(
+        imageSRC,
+        cropPixels.x,
+        cropPixels.y,
+        this.state.cropSize[0].width,
+        this.state.cropSize[0].width
+      );
+      return new Promise((resolve, reject) => {
+        ctx.canvas.toBlob(blob => {
+          if (!blob) {
+            console.error('Canvas is empty');
+            return;
+          }
+          blob.name = fileName;
+          window.URL.revokeObjectURL(this.fileUrl);
+          this.fileUrl = window.URL.createObjectURL(blob);
+          resolve(this.fileUrl);
+        }, 'image/jpeg');
+      });
+    }
+  };
   render() {
-    console.log(this.state);
+    console.log(this.state.croppedImages);
     return (
       <div className="h-full">
         <Header />
@@ -45,13 +118,21 @@ export class Upload extends Component {
             </div>
             <div className="h-6">
               <h1>Selected Image</h1>
-              {/* {this.state.imageSRC !== null && ( */}
-                <Canvas
-                  imageSRC={this.state.imageSRC}
-                  width={755}
-                  height={450}
-                />
-              {/* )} */}
+              <Canvas
+                imageSRC={this.state.imageSRC}
+                width={this.state.cropSize[0].width}
+                height={this.state.cropSize[0].height}
+                onSelected={(cropPixels, ctx) =>
+                  this.setState({
+                    ...this.state,
+                    cropPixels,
+                    ctx
+                  })
+                }
+              />
+            </div>
+            <div>
+              <img src={this.state.croppedImages[0]} alt=""></img>
             </div>
           </div>
         </div>
