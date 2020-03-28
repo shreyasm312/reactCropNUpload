@@ -71,7 +71,7 @@ export class Canvas extends Component {
       rect.x + 755 < 1024 &&
       rect.y + 450 < 1024
     ) {
-      this.removeMouseEvents(); //add it to stop listening for now
+      // this.removeMouseEvents(); //add it to stop listening for now
       this.props.onSelected(rect, this.ctx);
     }
     this.isDrag = false;

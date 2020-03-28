@@ -71,7 +71,7 @@ export class Upload extends Component {
             />
             <label htmlFor="image-upload">
               <div
-                className="flex border border-red-400 rounded-lg shadow-2xl w-full"
+                className="flex border border-red-400 rounded-lg shadow-xl w-full"
                 style={{ padding: '50px 100px' }}
               >
                 <div className="flex flex-col items-center px-4 w-1/2">
