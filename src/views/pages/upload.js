@@ -31,8 +31,14 @@ export class Upload extends Component {
         height: 380
       }
     ],
-    croppedImages: ['', '', '', '']
+    croppedImages: [undefined, undefined, undefined, undefined]
   };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.cropPixels !== prevState.cropPixels) {
+      this.getCroppedImage(this.state.cropPixels);
+    }
+  }
   onSelectFile = e => {
     if (e.target.files) {
       let reader = new FileReader();
@@ -57,12 +63,7 @@ export class Upload extends Component {
       reader.readAsDataURL(e.target.files[0]);
     }
   };
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.cropPixels !== prevState.cropPixels) {
-      this.makeClientCrop(this.state.cropPixels);
-    }
-  }
-  async makeClientCrop(cropPixels) {
+  getCroppedImage = async cropPixels => {
     const croppedImageUrl = await this.cropImage(
       this.state.imageRef,
       cropPixels,
@@ -71,7 +72,7 @@ export class Upload extends Component {
     var newCroppedImageUrls = this.state.croppedImages;
     newCroppedImageUrls[this.state.cropSize[0].id] = croppedImageUrl;
     this.setState({ croppedImages: newCroppedImageUrls });
-  }
+  };
   cropImage = (imageSRC, cropPixels, fileName) => {
     if (imageSRC !== null) {
       const { ctx } = this.state;
@@ -97,13 +98,15 @@ export class Upload extends Component {
           blob.name = fileName;
           window.URL.revokeObjectURL(this.fileUrl);
           this.fileUrl = window.URL.createObjectURL(blob);
+          ctx.canvas.width = 1024;
+          ctx.canvas.height = 1024;
           resolve(this.fileUrl);
         }, 'image/jpeg');
       });
     }
   };
   render() {
-    console.log(this.state.croppedImages);
+    // console.log(this.state.croppedImages);
     return (
       <div className="h-full">
         <Header />
@@ -119,7 +122,7 @@ export class Upload extends Component {
                 />
               </div>
             </div>
-            <div className="h-6">
+            <div className="block" style={{ maxHeight: 1024, maxWidth: 1024 }}>
               <h1>Selected Image</h1>
               <Canvas
                 imageSRC={this.state.imageSRC}
@@ -134,9 +137,11 @@ export class Upload extends Component {
                 }
               />
             </div>
-            <div>
-              <img src={this.state.croppedImages[0]} alt=""></img>
-            </div>
+            {this.state.croppedImages[0] !== undefined && (
+              <div className="block border-2 border-black">
+                <img src={this.state.croppedImages[0]} alt=""></img>
+              </div>
+            )}
           </div>
         </div>
       </div>
