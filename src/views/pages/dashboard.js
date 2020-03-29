@@ -78,7 +78,8 @@ export class Dashboard extends Component {
                 <button
                   onClick={() =>
                     this.setState({
-                      cropped: !this.state.cropped
+                      cropped: !this.state.cropped,
+                      allow: !this.state.allow
                     })
                   }
                   className={
