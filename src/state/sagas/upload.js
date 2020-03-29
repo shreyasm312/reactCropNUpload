@@ -1,4 +1,4 @@
-import { takeLatest, put } from 'redux-saga/effects';
+import { takeEvery, put } from 'redux-saga/effects';
 import { uploadImageActionTypes } from '../constants';
 import { uploadImageAPI } from '../api/upload';
 
@@ -18,5 +18,5 @@ export function* uploadImage({ payload }) {
 }
 
 export default function* root() {
-  yield takeLatest(uploadImageActionTypes.UPLOAD_IMAGE, uploadImage);
+  yield takeEvery(uploadImageActionTypes.UPLOAD_IMAGE, uploadImage);
 }

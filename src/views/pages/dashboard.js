@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { history } from '../../helpers/history';
-
 import { sendCanvasContext } from '../../state/actions/upload';
 
 import Header from '../layouts/header/Header';
@@ -53,7 +52,6 @@ export class Dashboard extends Component {
     }
   }
   render() {
-    // console.log(this.state);
     return (
       <div>
         <Header />

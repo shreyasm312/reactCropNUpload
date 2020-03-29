@@ -21,7 +21,7 @@ export default {
         draft.uploadImage.loading = true;
       },
       [uploadImageActionTypes.UPLOAD_IMAGE_SUCCESS]: (draft, { payload }) => {
-        draft.uploadImage.data = payload ? payload : {};
+        draft.uploadImage.data = payload ? payload.data : {};
         draft.uploadImage.status = STATUS.SUCCESS;
         draft.uploadImage.loading = false;
       },

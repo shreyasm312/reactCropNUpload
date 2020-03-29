@@ -12,13 +12,26 @@ import {
 export class Preview extends Component {
   state = {
     croppedImages: [],
-    ctx: null
+    ctx: null,
+    arrayOfUrls: []
   };
   componentDidMount() {
     this.setState({
       croppedImages: this.props.history.location.state,
       ctx: this.props.receiveCanvasContext.data
     });
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.uploadImage !== prevProps.uploadImage) {
+      if (this.props.uploadImage.status === 'success') {
+        this.setState({
+          arrayOfUrls: [
+            ...this.state.arrayOfUrls,
+            this.props.uploadImage.data.link
+          ]
+        });
+      }
+    }
   }
   getBase64Image(img) {
     const { ctx } = this.state;
@@ -49,16 +62,48 @@ export class Preview extends Component {
       <div>
         <Header />
         <div className="flex flex-col mx-auto justify-center text-center text-gray-800 items-center">
-          <h1 className="text-3xl">Preview Converted Images</h1>
-          <button
-            onClick={this.handleUpload}
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mx-2 mt-4"
-          >
-            Upload
-          </button>
-          {this.props.history.location.state.map((item, index) => (
-            <FilePreview key={index} imgPreview={item} index={index} />
-          ))}
+          <h1 className="text-3xl my-2">Preview Converted Images</h1>
+
+          {this.state.arrayOfUrls.length >= 1 &&
+          this.state.arrayOfUrls.length <= 4 ? (
+            <div>
+              <h1 className="my-2">Uploaded files</h1>
+              {this.state.arrayOfUrls.map((item, index) => (
+                <a
+                  className="block text-blue-700 underline"
+                  key={index}
+                  href={item}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {item}
+                </a>
+              ))}
+            </div>
+          ) : (
+            <>
+              <button
+                onClick={this.handleUpload}
+                disabled={
+                  !this.state.arrayOfUrls.length >= 1 &&
+                  !this.state.arrayOfUrls.length <= 4
+                    ? false
+                    : true
+                }
+                className={
+                  this.state.arrayOfUrls.length >= 1 &&
+                  this.state.arrayOfUrls.length <= 4
+                    ? 'bg-red-500 mx-2 mt-4 text-white font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed'
+                    : 'bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mx-2 mt-4'
+                }
+              >
+                Upload
+              </button>
+              {this.props.history.location.state.map((item, index) => (
+                <FilePreview key={index} imgPreview={item} index={index} />
+              ))}
+            </>
+          )}
         </div>
       </div>
     );

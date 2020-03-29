@@ -79,7 +79,7 @@ export class Upload extends Component {
                       color: '#fc8181'
                     }}
                   />
-                  <span className="mb-2 bg-red-500 hover:bg-red-700 text-white text-xs font-bold py-1 px-2 rounded">
+                  <span className="mb-2 bg-red-500 hover:bg-red-700 text-white text-xs font-bold py-1 px-2 rounded cursor-pointer">
                     Select Image
                   </span>
                   <span className="text-gray-500 text-xs">
