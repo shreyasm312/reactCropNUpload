@@ -56,10 +56,7 @@ export class Upload extends Component {
   render() {
     return (
       <div className="h-full">
-        <div
-          className="container m-auto flex justify-center"
-          // style={{ minHeight: 'calc(100vh - 89px)' }}
-        >
+        <div className="container m-auto flex justify-center">
           <div className="flex mt-4 text-center">
             <input
               className="cursor-pointer absolute block opacity-0 pin-r pin-t"
@@ -91,10 +88,10 @@ export class Upload extends Component {
                 </div>
                 <div className="flex flex-col items-center justify-center w-1/2">
                   <span className="text-base text-red-700">
-                    Final Crop sizes
+                    Final Converted sizes
                     <span className="text-xs text-gray-700">
-                      <br /> 755 * 450 <br /> 365 * 450 <br />365 *212 <br />{' '}
-                      380 * 380
+                      <br /> 755 * 450 <br /> 365 * 450 <br />
+                      365 *212 <br /> 380 * 380
                     </span>
                   </span>
                 </div>
