@@ -12,8 +12,8 @@ export class Dashboard extends Component {
       isInValidImage: true
     },
     cropped: false,
-    resetState: false,
     currentCrop: 0,
+    allow: false,
     cropSize: [
       {
         id: 0,
@@ -37,15 +37,8 @@ export class Dashboard extends Component {
       }
     ]
   };
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.cropped !== prevState.cropped) {
-      this.setState({
-        resetState: !this.state.resetState
-      });
-    }
-  }
   render() {
-    // console.log(this.state.cropped);
+    console.log(this.state);
     return (
       <div>
         <Header />
@@ -68,19 +61,43 @@ export class Dashboard extends Component {
             <>
               <div className="flex">
                 <button
-                  // onClick={() =>
-                  //   this.setState({ cropped: !this.state.cropped })
-                  // }
-                  className="bg-transparent mx-2 mt-4 hover:bg-red-500 text-red-700 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded"
-                  // className={
-                  //   this.state.cropped
-                  //     ? 'bg-red-500 mx-2 mt-4 text-white font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed'
-                  //     : 'bg-transparent mx-2 mt-4 hover:bg-red-500 text-red-700 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded'
-                  // }
+                  onClick={() =>
+                    this.setState({
+                      cropped: !this.state.cropped
+                    })
+                  }
+                  className={
+                    this.state.cropped
+                      ? 'bg-red-500 mx-2 mt-4 text-white font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed'
+                      : 'bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mx-2 mt-4'
+                  }
+                  disabled={this.state.cropped ? true : false}
                 >
                   Crop Image {this.state.currentCrop + 1}
                 </button>
-                <button className="bg-transparent mx-2 mt-4 hover:bg-red-500 text-red-700 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded">
+                <button
+                  onClick={() =>
+                    this.setState({
+                      cropped: !this.state.cropped
+                    })
+                  }
+                  className={
+                    this.state.cropped
+                      ? 'bg-transparent mx-2 mt-4 hover:bg-red-500 text-red-700 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded'
+                      : 'bg-red-500 mx-2 mt-4 text-white font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed'
+                  }
+                  disabled={this.state.cropped ? false : true}
+                >
+                  Reset
+                </button>
+                <button
+                  disabled={this.state.allow ? false : true}
+                  className={
+                    this.state.allow
+                      ? 'bg-transparent mx-2 mt-4 hover:bg-green-500 text-green-700 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded'
+                      : 'bg-green-500 mx-2 mt-4 text-white font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed'
+                  }
+                >
                   Next
                 </button>
               </div>
@@ -89,11 +106,13 @@ export class Dashboard extends Component {
               ) : (
                 <Crop
                   cropped={cropped =>
-                    this.setState({
-                      cropped
-                    })
+                    cropped
+                      ? this.setState({
+                          cropped: cropped,
+                          allow: !this.state.allow
+                        })
+                      : null
                   }
-                  resetState={this.state.resetState}
                   cropSize={this.state.cropSize[this.state.currentCrop]}
                   imageData={this.state.fileLoadData}
                 />

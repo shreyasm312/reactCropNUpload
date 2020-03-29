@@ -25,15 +25,8 @@ export class Canvas extends Component {
       () => this.drawCropRect(0, 0, this.props.width, this.props.height)
     );
   }
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props.resetState !== prevProps.resetState) {
-      // if (this.props.resetState) {
-      //   this.setState({
-      //     cropped: !this.state.cropped
-      //   });
-      //   this.addMouseEvents();
-      // }
-    }
+  componentWillUnmount() {
+    this.removeMouseEvents();
   }
   drawCropRect = (x = 0, y = 0, width, height) => {
     this.ctx.beginPath();
@@ -43,9 +36,6 @@ export class Canvas extends Component {
     this.ctx.rect(x, y, width, height);
     this.ctx.stroke();
   };
-  componentWillUnmount() {
-    this.removeMouseEvents();
-  }
   addMouseEvents() {
     document.addEventListener('mousedown', this.onMouseDown, false);
     document.addEventListener('mousemove', this.onMouseMove, false);

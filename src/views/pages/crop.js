@@ -66,7 +66,6 @@ export class Crop extends Component {
               imageSRC={this.props.imageData.imageSRC}
               width={this.props.cropSize.width}
               height={this.props.cropSize.height}
-              resetState={this.props.resetState}
               onSelected={(cropPixels, ctx, cropped) =>
                 this.setState(
                   {
