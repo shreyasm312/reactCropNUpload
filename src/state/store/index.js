@@ -1,8 +1,8 @@
 import { applyMiddleware, createStore, compose, combineReducers } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import rootSaga from '../sagas';
-import rootReducer from '../reducers';
+import rootSaga from '../sagas/upload';
+import rootReducer from '../reducers/upload';
 
 import middleware, { sagaMiddleware } from './middleware';
 
@@ -10,7 +10,7 @@ const reducer = persistReducer(
   {
     key: 'cropandupload',
     storage,
-    whitelist: []
+    blacklist: ['uploadImage']
   },
   combineReducers({ ...rootReducer })
 );
@@ -30,8 +30,8 @@ const configStore = (initialState = {}) => {
   };
 };
 
-const { store } = configStore();
+const { store, persistor } = configStore();
 
 global.store = store;
 
-export { store };
+export { store, persistor };
