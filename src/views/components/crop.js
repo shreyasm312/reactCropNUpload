@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Canvas from '../components/canvas/canvas';
+import Canvas from './canvas';
 import FilePreview from './filePreview';
 export class Crop extends Component {
   state = {
@@ -56,7 +56,6 @@ export class Crop extends Component {
     }
   };
   render() {
-    console.log(this.props, 'crop');
     return (
       <div className="flex flex-col items-center justify-center">
         {!this.state.isInValidImage && this.state.imageRef !== null && (

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Header from '../layouts/header/Header';
-import Fileload from './fileLoad';
-import FilePreview from './filePreview';
-import Crop from './crop';
+import Fileload from '../components/fileLoad';
+import FilePreview from '../components/filePreview';
+import Crop from '../components/crop';
 
 export class Dashboard extends Component {
   state = {
