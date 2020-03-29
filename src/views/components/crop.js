@@ -6,7 +6,8 @@ export class Crop extends Component {
     cropPixels: {},
     ctx: undefined,
     cropped: false,
-    croppedImages: [undefined, undefined, undefined, undefined]
+    croppedImages: [],
+    sendCropped: []
   };
   componentDidUpdate(prevProps, prevState) {
     if (this.state.cropPixels !== prevState.cropPixels) {
@@ -21,7 +22,10 @@ export class Crop extends Component {
     );
     var newCroppedImageUrls = this.state.croppedImages;
     newCroppedImageUrls[this.props.cropSize.id] = croppedImageUrl;
-    this.setState({ croppedImages: newCroppedImageUrls });
+    this.setState({
+      croppedImages: newCroppedImageUrls,
+      sendCropped: this.state.sendCropped.push(croppedImageUrl)
+    });
   };
   cropImage = (imageRef, cropPixels, fileName) => {
     if (imageRef !== null) {
@@ -74,7 +78,7 @@ export class Crop extends Component {
                     ctx,
                     cropped
                   },
-                  () => this.props.cropped(cropped)
+                  () => this.props.cropped(cropped, this.state.sendCropped)
                 )
               }
             />

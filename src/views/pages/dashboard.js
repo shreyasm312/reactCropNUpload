@@ -3,6 +3,7 @@ import Header from '../layouts/header/Header';
 import Fileload from '../components/fileLoad';
 import FilePreview from '../components/filePreview';
 import Crop from '../components/crop';
+import { history } from '../../helpers/history';
 
 export class Dashboard extends Component {
   state = {
@@ -36,10 +37,11 @@ export class Dashboard extends Component {
         width: 380,
         height: 380
       }
-    ]
+    ],
+    croppedImages: []
   };
   render() {
-    console.log(this.state, 'dashboard');
+    console.log(this.state);
     return (
       <div>
         <Header />
@@ -74,7 +76,9 @@ export class Dashboard extends Component {
                   }
                   disabled={this.state.cropped ? true : false}
                 >
-                  Crop Image {this.state.currentCrop + 1}
+                  {this.state.preview
+                    ? 'Crop Image '
+                    : `Crop Image ${this.state.currentCrop + 1}`}
                 </button>
                 <button
                   onClick={() =>
@@ -84,11 +88,13 @@ export class Dashboard extends Component {
                     })
                   }
                   className={
-                    this.state.cropped
+                    this.state.cropped && !this.state.preview
                       ? 'bg-transparent mx-2 mt-4 hover:bg-red-500 text-red-700 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded'
                       : 'bg-red-500 mx-2 mt-4 text-white font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed'
                   }
-                  disabled={this.state.cropped ? false : true}
+                  disabled={
+                    this.state.cropped && !this.state.preview ? false : true
+                  }
                 >
                   Reset
                 </button>
@@ -123,11 +129,16 @@ export class Dashboard extends Component {
                   <FilePreview imgPreview={this.state.fileLoadData.imageSRC} />
                 ) : (
                   <Crop
-                    cropped={cropped =>
+                    cropped={(cropped, croppedImages) =>
                       cropped
                         ? this.setState({
+                            ...this.state,
                             cropped: cropped,
-                            allow: !this.state.allow
+                            allow: !this.state.allow,
+                            croppedImages: [
+                              ...this.state.croppedImages,
+                              croppedImages
+                            ]
                           })
                         : null
                     }
@@ -136,7 +147,10 @@ export class Dashboard extends Component {
                   />
                 )
               ) : (
-                <div>preview</div>
+                history.push({
+                  pathname: '/preview',
+                  state: this.state.croppedImages
+                })
               )}
             </>
           )}
