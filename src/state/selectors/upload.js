@@ -6,3 +6,7 @@ export const selectUploadImage = createSelector(
   uploadImageReducer =>
     uploadImageReducer ? uploadImageReducer.uploadImage : {}
 );
+export const selectSendCanvasContext = createSelector(
+  [selectUploadImageReducer],
+  uploadImageReducer => uploadImageReducer.sendCanvasContext
+);

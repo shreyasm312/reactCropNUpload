@@ -6,6 +6,9 @@ export const uploadImageState = {
     status: STATUS.IDLE,
     loading: false,
     data: {}
+  },
+  sendCanvasContext: {
+    data: null
   }
 };
 
@@ -18,7 +21,7 @@ export default {
         draft.uploadImage.loading = true;
       },
       [uploadImageActionTypes.UPLOAD_IMAGE_SUCCESS]: (draft, { payload }) => {
-        draft.uploadImage.data = payload ? payload.data : {};
+        draft.uploadImage.data = payload ? payload : {};
         draft.uploadImage.status = STATUS.SUCCESS;
         draft.uploadImage.loading = false;
       },
@@ -26,6 +29,9 @@ export default {
         draft.uploadImage.status = STATUS.ERROR;
         draft.uploadImage.loading = false;
         draft.uploadImage.data = parseError(payload);
+      },
+      [uploadImageActionTypes.SEND_CANVAS_CONTEXT]: (draft, { payload }) => {
+        draft.sendCanvasContext.data = payload.data;
       }
     },
     uploadImageState

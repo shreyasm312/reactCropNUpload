@@ -4,7 +4,11 @@ export class filePreview extends Component {
     return (
       <>
         <div className="mt-4 p-4 flex justify-center items-center">
-          <img src={this.props.imgPreview} alt=""></img>
+          <img
+            src={this.props.imgPreview}
+            alt=""
+            id={'croppedImage' + this.props.index}
+          ></img>
         </div>
       </>
     );

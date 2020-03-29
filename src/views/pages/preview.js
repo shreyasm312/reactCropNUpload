@@ -1,11 +1,49 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+
 import FilePreview from '../components/filePreview';
 import Header from '../layouts/header/Header';
-
+import { uploadImage } from '../../state/actions/upload';
+import {
+  selectUploadImage,
+  selectSendCanvasContext
+} from '../../state/selectors/upload';
 export class Preview extends Component {
-  handleUpload = () => {
-    console.log('object');
+  state = {
+    croppedImages: [],
+    ctx: null
   };
+  componentDidMount() {
+    this.setState({
+      croppedImages: this.props.history.location.state,
+      ctx: this.props.receiveCanvasContext.data
+    });
+  }
+  getBase64Image(img) {
+    const { ctx } = this.state;
+    ctx.canvas.width = img.width;
+    ctx.canvas.height = img.height;
+    ctx.drawImage(img, 0, 0);
+    var dataURL = ctx.canvas.toDataURL('image/png');
+    return dataURL.replace(/^data:image\/(png|jpg);base64,/, '');
+  }
+  handleUpload = () => {
+    const { croppedImages } = this.state;
+    croppedImages
+      .filter(blobUrl => blobUrl[0] !== '')
+      .forEach(async (blobUrl, index) => {
+        var image = this.getBase64Image(
+          document.getElementById('croppedImage' + index)
+        );
+        var formData = new FormData();
+        formData.append('type', 'file');
+        formData.append('image', image);
+        const { dispatch } = this.props;
+        dispatch(uploadImage(formData));
+      });
+  };
+
   render() {
     return (
       <div>
@@ -19,12 +57,16 @@ export class Preview extends Component {
             Upload
           </button>
           {this.props.history.location.state.map((item, index) => (
-            <FilePreview key={index} imgPreview={item} />
+            <FilePreview key={index} imgPreview={item} index={index} />
           ))}
         </div>
       </div>
     );
   }
 }
+const mapStateToProps = createStructuredSelector({
+  uploadImage: selectUploadImage,
+  receiveCanvasContext: selectSendCanvasContext
+});
 
-export default Preview;
+export default connect(mapStateToProps, null)(Preview);

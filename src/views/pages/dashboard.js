@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
+import { history } from '../../helpers/history';
+
+import { sendCanvasContext } from '../../state/actions/upload';
+
 import Header from '../layouts/header/Header';
 import Fileload from '../components/fileLoad';
 import FilePreview from '../components/filePreview';
 import Crop from '../components/crop';
-import { history } from '../../helpers/history';
 
 export class Dashboard extends Component {
   state = {
@@ -16,6 +21,7 @@ export class Dashboard extends Component {
     currentCrop: 0,
     allow: false,
     preview: false,
+    ctx: null,
     cropSize: [
       {
         id: 0,
@@ -40,8 +46,14 @@ export class Dashboard extends Component {
     ],
     croppedImages: []
   };
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.ctx !== prevState.ctx) {
+      const { dispatch } = this.props;
+      dispatch(sendCanvasContext(this.state.ctx));
+    }
+  }
   render() {
-    console.log(this.state);
+    // console.log(this.state);
     return (
       <div>
         <Header />
@@ -129,11 +141,12 @@ export class Dashboard extends Component {
                   <FilePreview imgPreview={this.state.fileLoadData.imageSRC} />
                 ) : (
                   <Crop
-                    cropped={(cropped, croppedImages) =>
+                    cropped={(cropped, croppedImages, ctx) =>
                       cropped
                         ? this.setState({
                             ...this.state,
                             cropped: cropped,
+                            ctx,
                             allow: !this.state.allow,
                             croppedImages: [
                               ...this.state.croppedImages,
@@ -160,4 +173,4 @@ export class Dashboard extends Component {
   }
 }
 
-export default Dashboard;
+export default connect(null, null)(Dashboard);

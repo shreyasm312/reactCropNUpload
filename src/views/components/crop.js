@@ -78,7 +78,7 @@ export class Crop extends Component {
                     ctx,
                     cropped
                   },
-                  () => this.props.cropped(cropped, this.state.sendCropped)
+                  () => this.props.cropped(cropped, this.state.sendCropped, ctx)
                 )
               }
             />

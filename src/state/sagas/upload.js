@@ -1,10 +1,21 @@
-import { takeLatest } from 'redux-saga/effects';
+import { takeLatest, put } from 'redux-saga/effects';
 import { uploadImageActionTypes } from '../constants';
-import { saga } from '../../utils/saga';
 import { uploadImageAPI } from '../api/upload';
 
-const uploadImage = ({ payload }) =>
-  saga(uploadImageAPI, uploadImageActionTypes.UPLOAD_IMAGE, payload);
+export function* uploadImage({ payload }) {
+  try {
+    const response = yield uploadImageAPI(payload);
+    yield put({
+      type: uploadImageActionTypes.UPLOAD_IMAGE_SUCCESS,
+      payload: response
+    });
+  } catch (err) {
+    yield put({
+      type: uploadImageActionTypes.UPLOAD_IMAGE_FAILURE,
+      payload: err
+    });
+  }
+}
 
 export default function* root() {
   yield takeLatest(uploadImageActionTypes.UPLOAD_IMAGE, uploadImage);
