@@ -93,7 +93,7 @@ export class Upload extends Component {
                   <span className="text-base text-red-700">
                     Final Crop sizes
                     <span className="text-xs text-gray-700">
-                      <br /> 755 * 450 <br /> 365 * 450 <br /> 365 *212 <br />
+                      <br /> 755 * 450 <br /> 365 * 450 <br />365 *212 <br />{' '}
                       380 * 380
                     </span>
                   </span>

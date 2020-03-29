@@ -14,6 +14,7 @@ export class Dashboard extends Component {
     cropped: false,
     currentCrop: 0,
     allow: false,
+    preview: false,
     cropSize: [
       {
         id: 0,
@@ -93,14 +94,19 @@ export class Dashboard extends Component {
                 </button>
                 <button
                   onClick={() =>
-                    this.setState({
-                      currentCrop:
-                        this.state.currentCrop < 3
-                          ? this.state.currentCrop + 1
-                          : this.state.currentCrop,
-                      cropped: false,
-                      allow: false
-                    })
+                    this.state.currentCrop < 3
+                      ? this.setState(previousState => ({
+                          currentCrop:
+                            previousState.currentCrop === 3
+                              ? previousState.currentCrop
+                              : this.state.currentCrop + 1,
+                          cropped: false,
+                          allow: false
+                        }))
+                      : this.setState({
+                          preview: !this.state.preview,
+                          cropped: this.state.cropped
+                        })
                   }
                   disabled={this.state.allow ? false : true}
                   className={
@@ -109,24 +115,28 @@ export class Dashboard extends Component {
                       : 'bg-green-500 mx-2 mt-4 text-white font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed'
                   }
                 >
-                  Next
+                  {this.state.currentCrop === 3 ? 'Preview' : 'Next'}
                 </button>
               </div>
-              {!this.state.cropped ? (
-                <FilePreview imgPreview={this.state.fileLoadData.imageSRC} />
+              {!this.state.preview ? (
+                !this.state.cropped ? (
+                  <FilePreview imgPreview={this.state.fileLoadData.imageSRC} />
+                ) : (
+                  <Crop
+                    cropped={cropped =>
+                      cropped
+                        ? this.setState({
+                            cropped: cropped,
+                            allow: !this.state.allow
+                          })
+                        : null
+                    }
+                    cropSize={this.state.cropSize[this.state.currentCrop]}
+                    imageData={this.state.fileLoadData}
+                  />
+                )
               ) : (
-                <Crop
-                  cropped={cropped =>
-                    cropped
-                      ? this.setState({
-                          cropped: cropped,
-                          allow: !this.state.allow
-                        })
-                      : null
-                  }
-                  cropSize={this.state.cropSize[this.state.currentCrop]}
-                  imageData={this.state.fileLoadData}
-                />
+                <div>preview</div>
               )}
             </>
           )}
