@@ -38,7 +38,7 @@ export class Dashboard extends Component {
     ]
   };
   render() {
-    console.log(this.state);
+    console.log(this.state, 'dashboard');
     return (
       <div>
         <Header />
@@ -92,6 +92,16 @@ export class Dashboard extends Component {
                   Reset
                 </button>
                 <button
+                  onClick={() =>
+                    this.setState({
+                      currentCrop:
+                        this.state.currentCrop < 3
+                          ? this.state.currentCrop + 1
+                          : this.state.currentCrop,
+                      cropped: false,
+                      allow: false
+                    })
+                  }
                   disabled={this.state.allow ? false : true}
                   className={
                     this.state.allow

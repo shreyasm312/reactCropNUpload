@@ -127,6 +127,7 @@ export class Canvas extends Component {
   };
 
   render() {
+    console.log(this.props, 'canvas');
     return (
       <>
         {this.state.imageSRC !== null && (

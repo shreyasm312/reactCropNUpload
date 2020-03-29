@@ -56,6 +56,7 @@ export class Crop extends Component {
     }
   };
   render() {
+    console.log(this.props, 'crop');
     return (
       <div className="flex flex-col items-center justify-center">
         {!this.state.isInValidImage && this.state.imageRef !== null && (
