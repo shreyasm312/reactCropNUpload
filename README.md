@@ -10,7 +10,7 @@ The following project won't use any libraries for the core implementation of the
 
    ```
    horizontal : 755 x 450
-   vertical : 365 x 450</br>
+   vertical : 365 x 450
    horizontal small : 365 x 212
    gallery : 380 x 380
    ```
