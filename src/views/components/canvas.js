@@ -69,8 +69,8 @@ export class Canvas extends Component {
     if (
       rect.x >= 0 &&
       rect.y >= 0 &&
-      rect.x + 755 < 1024 &&
-      rect.y + 450 < 1024
+      rect.x + this.props.width < 1024 &&
+      rect.y + this.props.height < 1024
     ) {
       this.setState({
         cropped: !this.state.cropped
@@ -95,8 +95,8 @@ export class Canvas extends Component {
       if (
         rect.x >= 0 &&
         rect.y >= 0 &&
-        rect.x + 755 < 1024 &&
-        rect.y + 450 < 1024
+        rect.x + this.props.width < 1024 &&
+        rect.y + this.props.height < 1024
       ) {
         this.drawCropRect(rect.x, rect.y, this.props.width, this.props.height);
         this.isDirty = false;
@@ -115,8 +115,8 @@ export class Canvas extends Component {
       if (
         rect.x >= 0 &&
         rect.y >= 0 &&
-        rect.x + 755 < 1024 &&
-        rect.y + 450 < 1024
+        rect.x + this.props.width < 1024 &&
+        rect.y + this.props.height < 1024
       ) {
         this.drawCropRect(rect.x, rect.y, this.props.width, this.props.height);
       } else {
