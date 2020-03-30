@@ -69,7 +69,9 @@ export class Preview extends Component {
         <Header />
         <div className="flex flex-col mx-auto justify-center text-center text-gray-800 items-center">
           <h1 className="text-3xl my-2">Preview Converted Images</h1>
-
+          <button className="bg-transparent mx-2 mt-4 hover:bg-red-500 text-red-700 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded">
+            <Link to="/">Start Over</Link>
+          </button>
           {this.state.arrayOfUrls.length >= 1 &&
           this.state.arrayOfUrls.length <= 4 ? (
             <div>
@@ -85,9 +87,6 @@ export class Preview extends Component {
                   {item}
                 </a>
               ))}
-              <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mx-2 mt-4">
-                <Link to="/">Start Over</Link>
-              </button>
             </div>
           ) : (
             <>
@@ -103,7 +102,7 @@ export class Preview extends Component {
                   this.state.arrayOfUrls.length >= 1 &&
                   this.state.arrayOfUrls.length <= 4
                     ? 'bg-red-500 mx-2 mt-4 text-white font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed'
-                    : 'bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mx-2 mt-4'
+                    : 'bg-red-500 hover:bg-red-700 text-xl text-white font-normal py-1 px-4 rounded mx-2 mt-4'
                 }
               >
                 Upload

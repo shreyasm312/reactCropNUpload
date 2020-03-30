@@ -75,7 +75,7 @@ export class Dashboard extends Component {
               })
             }
           />
-          {this.state.fileLoadData.imageSRC !== null && (
+          {this.state.fileLoadData.imageSRC !== null ? (
             <>
               <div className="flex">
                 <button
@@ -175,6 +175,8 @@ export class Dashboard extends Component {
                 })
               )}
             </>
+          ) : (
+            <p>Please Upload the image of 1024 * 1024</p>
           )}
         </div>
       </div>
