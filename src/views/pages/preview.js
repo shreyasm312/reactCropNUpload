@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-
+import { Link } from 'react-router-dom';
 import FilePreview from '../components/filePreview';
 import Header from '../layouts/header/Header';
 import { uploadImage } from '../../state/actions/upload';
@@ -64,7 +64,6 @@ export class Preview extends Component {
   };
 
   render() {
-    console.log(this.state.croppedImages);
     return (
       <div>
         <Header />
@@ -86,6 +85,9 @@ export class Preview extends Component {
                   {item}
                 </a>
               ))}
+              <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mx-2 mt-4">
+                <Link to="/">Start Over</Link>
+              </button>
             </div>
           ) : (
             <>

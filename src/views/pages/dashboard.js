@@ -57,7 +57,6 @@ export class Dashboard extends Component {
     }
   }
   render() {
-
     return (
       <div>
         <Header />
@@ -134,7 +133,7 @@ export class Dashboard extends Component {
                   disabled={this.state.allow ? false : true}
                   className={
                     this.state.allow
-                      ? 'bg-transparent mx-2 mt-4 hover:bg-green-500 text-green-700 font-semibold hover:text-white py-2 px-4 border border-green-500 hover:border-transparent rounded'
+                      ? 'bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mx-2 mt-4'
                       : 'bg-green-500 mx-2 mt-4 text-white font-bold py-2 px-4 rounded opacity-50 cursor-not-allowed'
                   }
                 >
