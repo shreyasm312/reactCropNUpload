@@ -16,10 +16,16 @@ export class Preview extends Component {
     arrayOfUrls: []
   };
   componentDidMount() {
-    this.setState({
-      croppedImages: this.props.history.location.state,
-      ctx: this.props.receiveCanvasContext.data
-    });
+    this.setState(
+      {
+        croppedImages: this.props.history.location.state,
+        ctx: this.props.receiveCanvasContext.data
+      },
+      () =>
+        this.setState({
+          croppedImages: this.state.croppedImages.map(item => item.url)
+        })
+    );
   }
   componentDidUpdate(prevProps, prevState) {
     if (this.props.uploadImage !== prevProps.uploadImage) {
@@ -58,6 +64,7 @@ export class Preview extends Component {
   };
 
   render() {
+    console.log(this.state.croppedImages);
     return (
       <div>
         <Header />
@@ -99,7 +106,7 @@ export class Preview extends Component {
               >
                 Upload
               </button>
-              {this.props.history.location.state.map((item, index) => (
+              {this.state.croppedImages.map((item, index) => (
                 <FilePreview key={index} imgPreview={item} index={index} />
               ))}
             </>

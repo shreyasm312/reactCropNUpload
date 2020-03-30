@@ -21,26 +21,31 @@ export class Dashboard extends Component {
     allow: false,
     preview: false,
     ctx: null,
+    resetState: false,
     cropSize: [
       {
         id: 0,
         width: 755,
-        height: 450
+        height: 450,
+        url: ''
       },
       {
         id: 1,
         width: 365,
-        height: 450
+        height: 450,
+        url: ''
       },
       {
         id: 2,
         width: 365,
-        height: 212
+        height: 212,
+        url: ''
       },
       {
         id: 3,
         width: 380,
-        height: 380
+        height: 380,
+        url: ''
       }
     ],
     croppedImages: []
@@ -52,6 +57,7 @@ export class Dashboard extends Component {
     }
   }
   render() {
+
     return (
       <div>
         <Header />
@@ -94,7 +100,8 @@ export class Dashboard extends Component {
                   onClick={() =>
                     this.setState({
                       cropped: !this.state.cropped,
-                      allow: !this.state.allow
+                      allow: !this.state.allow,
+                      resetState: !this.state.resetState
                     })
                   }
                   className={
@@ -141,26 +148,31 @@ export class Dashboard extends Component {
                   <Crop
                     cropped={(cropped, croppedImages, ctx) =>
                       cropped
-                        ? this.setState({
+                        ? this.setState(prevState => ({
                             ...this.state,
                             cropped: cropped,
                             ctx,
                             allow: !this.state.allow,
-                            croppedImages: [
-                              ...this.state.croppedImages,
-                              croppedImages
-                            ]
-                          })
+                            cropSize: prevState.cropSize.map((obj, index) =>
+                              index === this.state.currentCrop
+                                ? Object.assign(obj, {
+                                    ...obj,
+                                    url: croppedImages
+                                  })
+                                : obj
+                            )
+                          }))
                         : null
                     }
                     cropSize={this.state.cropSize[this.state.currentCrop]}
                     imageData={this.state.fileLoadData}
+                    previewData={this.state.cropSize}
                   />
                 )
               ) : (
                 history.push({
                   pathname: '/preview',
-                  state: this.state.croppedImages
+                  state: this.state.cropSize
                 })
               )}
             </>
