@@ -1,5 +1,5 @@
 # React crop and upload
-[Live Demo](competent-goldberg-0a10f6.netlify.com) 
+[Live Demo](https://competent-goldberg-0a10f6.netlify.com) 
 The following project won't use any libraries for the core implementation of the project.
 ## Please create a simple app that includes the following:
 
