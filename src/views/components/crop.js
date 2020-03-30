@@ -64,7 +64,11 @@ export class Crop extends Component {
       <div className="flex flex-col items-center justify-center">
         {!this.state.isInValidImage && this.state.imageRef !== null && (
           <div className="my-4" style={{ minHeight: 1024, minWidth: 1024 }}>
-            <h1>Crop your image</h1>
+            <h1 className="text-xl">Crop your image</h1>
+            <h1 className="text-gray-700">
+              Please click and drag on the crop square to find the selection you want to crop and
+              release the mouse click to crop.
+            </h1>
             <Canvas
               imageRef={this.props.imageData.imageRef}
               imageSRC={this.props.imageData.imageSRC}
